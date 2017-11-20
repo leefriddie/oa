@@ -65,12 +65,14 @@ class SiteController extends BaseController
      */
     public function actionIndex()
     {
+        $view = Yii::$app->view;
         $model = new Mission();
         $where = [
             'user_id' => User::getUserId()
         ];
         $data = $model->getMission($where,false);
-        return $this->render('index',['data'=>$data]);
+        $view->params['data'] = $data;
+        return $this->render('index');
     }
 
     /**
@@ -143,17 +145,40 @@ class SiteController extends BaseController
     public function actionCalend(){
         //传过来的日历日期
         $data = Yii::$app->request->get();
-        $model = new Mission();
         if($data['selDate']){
             $where = [
                 'user_id' => User::getUserId(),
                 'mission_start' => $data['selDate']
             ];
-            $mission_data = $model->getMission($where);
+            $mission_data = Mission::getMission($where);
             if($mission_data){
-                return $this->return_ajax($data);
+                return $this->return_ajax(self::SUCCESS,$mission_data);
             }
 
+        }
+    }
+
+    public function actionCalend_data(){
+        $data = Yii::$app->request->get();
+        $where = [
+            'user_id' => User::getUserId(),
+            'mission_start' => $data['start']
+        ];
+        $res = Mission::getMission($where);
+        if(!$res){
+            $model = new Mission();
+        }else{
+            $model = $res;
+        }
+        $model->mission_content = $data['content'];
+        $model->mission_start   = $data['start'];
+        $model->mission_end     = $data['end'];
+        $model->user_id         = User::getUserId();
+        $result = $model->save();
+        if($result > 0){
+            return $this->return_ajax(self::SUCCESS,false,'添加任务成功');
+        }else{
+            return $this->return_ajax(self::UPDATE_ERROR,false,'任务添加失败，稍后再试！');
         }
     }
 

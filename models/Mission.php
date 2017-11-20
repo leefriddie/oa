@@ -58,7 +58,7 @@ class Mission extends \yii\db\ActiveRecord
      * @param bool $return_type 为true的话就返回一条 false返回多条
      * @return bool
      */
-    public function getMission($data=false, $return_type=true){
+    static public function getMission($data=false, $return_type=true){
         if(is_array($data) || !$data){
             if($return_type){
                 return (new Query())->from(self::tableName())->where($data)->one();

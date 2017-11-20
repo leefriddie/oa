@@ -572,19 +572,21 @@ $this->beginPage();
                 axisFormat: 'H:mm',
                 dayClick: function(date) {
                     var selDate =$.fullCalendar.formatDate(date,'yyyy-MM-dd');//格式化日期
-                    day_click(selDate);
+                    day_click(selDate,false);
                 },
                 eventClick:function(event){
-                    day_click($.fullCalendar.formatDate(event.start,'yyyy-MM-dd'))
+                    day_click($.fullCalendar.formatDate(event.start,'yyyy-MM-dd'),true)
                 },
                 events: [
+                    <?php foreach($this->params['data'] as $mission):?>
                     {
-                        title: '全天计划\r\n#####\r\n写代码',
-                        start: new Date(y, m, 1)
-                        //end:new Date(y, m, d-2),
-                        //allday:false,
+                        title: '<?=$mission['mission_content']?>',
+                        start: '<?=$mission['mission_start']?>',
+                        end: '<?=$mission['mission_end']?>',
+                        allday:<?php echo $mission['mission_start']==$mission['mission_end']?true:false?>,
                         //url:'',
-                    }
+                    },
+                    <?php endforeach;?>
                 ]
             });
 
@@ -596,26 +598,40 @@ $this->beginPage();
             $('.save_button').click(function(){
                 var content = $('#event').val();
                 var start = $('#startdate').val();
-                var end = $('#enddate').val();
-                $.get('<?php echo Url::to('/site/calend')?>',{content:content,start:start,end:end},function(data){
+                if($('#start_time').is(':checked')){
+                    var end = start;
+                }else {
+                    var end = $('#enddate').val();
+                }
+                $.get('<?php echo Url::to('/site/calend_data')?>',{content:content,start:start,end:end},function(data){
 
-                })
+                },'json')
             });
 
         });
 
 
-        function day_click(selDate){
+        function day_click(selDate,type){
             $('#myModal').modal('show');
-            $.get('<?php echo Url::to('/site/calend')?>',{selDate:selDate},function(data){
-                if(data){
-                    if(data.ret == 1){
-                        $('#event').val(data);
+            if(type == false){
+                $('#startdate').val(selDate);
+            }else{
+                $.get('<?php echo Url::to('/site/calend')?>',{selDate:selDate},function(e){
+                    if(e.ret == 1){
+                        var content = e.data.mission_content;
+                        var start_date = e.data.mission_start;
+                        var end_date = e.data.mission_end;
+                        $('#event').val(content);
+                        $('#startdate').val(start_date);
+
+                        if(start_date != end_date){
+                            $('#p_endtime').show();
+                            $('#start_time').attr('checked',false);
+                            $('#end_time').attr('checked',true);
+                        }
                     }
-                }else{
-                    $('#startdate').val(selDate);
-                }
-            });
+                },'json');
+            }
 
         }
     </script>

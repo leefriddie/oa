@@ -14,16 +14,18 @@ class BaseController extends Controller{
 
     const SUCCESS = 1;
     const EMPTY_ERROR = 2;
+    const FAILED = 0;
+    const UPDATE_ERROR = 11;
 
 
     public $layout = 'main_two';
 
 
-    public function return_ajax($data){
+    public function return_ajax($ret,$data=false,$message=false){
         if(empty($data)){
-            return ['ret'=>self::EMPTY_ERROR,'msg'=>'data is empty'];
+            return ['ret'=>self::EMPTY_ERROR,'data'=>false,'msg'=>'data is empty'];
         }
-        return json_encode(['ret'=>self::SUCCESS,'data'=>$data]);
+        return json_encode(['ret'=>$ret,'data'=>$data,'msg'=>$message]);
     }
 
 
