@@ -22,8 +22,8 @@ class BaseController extends Controller{
 
 
     public function return_ajax($ret,$data=false,$message=false){
-        if(empty($data)){
-            return ['ret'=>self::EMPTY_ERROR,'data'=>[],'msg'=>'data is empty'];
+        if($ret != self::SUCCESS){
+            return json_encode(['ret'=>$ret,'data'=>false,'msg'=>'data is empty']);
         }
         return json_encode(['ret'=>$ret,'data'=>$data,'msg'=>$message]);
     }

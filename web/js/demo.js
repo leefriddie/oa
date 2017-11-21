@@ -543,3 +543,23 @@ var Demo = function() {
     }
   }
 }();
+
+function success_topbar(type,data,msg){
+    if(type == 'success'){
+        var val = 'info';
+    }else{
+        var val = 'danger';
+    }
+    if(msg != null || msg != 'undefined'){
+        var message = '数据错误';
+        val = 'danger';
+    }else{
+        var message = msg;
+    }
+    var html = '';
+    html +='<div class="alert alert-'+val+' light alert-dismissable">';
+    html +='   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button><i class="fa fa-info pr10"></i>';
+    html +='    <strong>'+data+'</strong>'+message;
+    html +=' </div>';
+    $(html).slideToggle('fast');
+}
