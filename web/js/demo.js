@@ -557,7 +557,7 @@ function success_topbar(type,data,msg){
         var message = msg;
     }
     var html = '';
-    html +='<div class="alert alert-'+val+' light alert-dismissable">';
+    html +='<div class="alert alert-'+val+' light alert-dismissable alert_topbar">';
     html +='   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button><i class="fa fa-info pr10"></i>';
     html +='    <strong>'+data+'</strong>'+message;
     html +=' </div>';
