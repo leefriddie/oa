@@ -30,9 +30,7 @@ $this->beginPage();
     </head>
     <?php $this->beginBody()?>
     <body class="admin-layout-page">
-    <div style="z-index: 10;border-color: red;width: 200px;height: 100px;position: absolute;">
 
-    </div>
     <!-- Start: Theme Preview Pane -->
     <div id="skin-toolbox">
         <div class="panel">
@@ -172,7 +170,9 @@ $this->beginPage();
 
     <!-- Start: Main -->
     <div id="main">
+        <div style="z-index: 10;border-color: red;width: 200px;height: 100px;position: absolute;">
 
+        </div>
         <!-- Start: Header -->
         <header class="navbar navbar-fixed-top">
             <div class="navbar-branding">
