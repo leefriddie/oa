@@ -561,5 +561,5 @@ function success_topbar(type,data,msg){
     html +='   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button><i class="fa fa-info pr10"></i>';
     html +='    <strong>'+data+'</strong>'+message;
     html +=' </div>';
-    $(html).slideToggle('fast');
+    html.slideToggle('fast');
 }

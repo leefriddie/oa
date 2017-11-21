@@ -583,7 +583,7 @@ $this->beginPage();
                         title: '<?=$mission['mission_content']?>',
                         start: '<?=$mission['mission_start']?>',
                         end: '<?=$mission['mission_end']?>',
-                        allday:<?php echo $mission['mission_start']==$mission['mission_end']?true:false?>,
+                        allday:'<?php echo $mission['mission_start']==$mission['mission_end']?true:false?>',
                         //url:'',
                     },
                     <?php endforeach;?>

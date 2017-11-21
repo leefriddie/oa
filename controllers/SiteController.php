@@ -176,7 +176,7 @@ class SiteController extends BaseController
         $model->user_id         = User::getUserId();
         $result = $model->save();
         if($result){
-            return $this->return_ajax(self::SUCCESS,false,'添加或更新任务成功');
+            return $this->return_ajax(self::SUCCESS,Mission::getMission($where),'添加或更新任务成功');
         }else{
             return $this->return_ajax(self::UPDATE_ERROR,false,'任务添加失败，稍后再试！');
         }
