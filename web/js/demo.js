@@ -562,6 +562,6 @@ function success_topbar(type,data,msg){
     html +='    <strong>'+data+'</strong>'+message;
     html +=' </div>';
     $('#alert_topbar').html(html);
-    $("#alert_topbar").slideToggle('normal');
-    setTimeout(location.reload(),3000);
+    $("#alert_topbar").slideToggle('slow');
+    //setTimeout(location.reload(),3000);
 }
