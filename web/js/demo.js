@@ -557,10 +557,10 @@ function success_topbar(type,data,msg){
         var message = msg;
     }
     var html = '';
-    html +='<div class="alert alert-'+val+' light alert-dismissable alert_topbar">';
+    html +='<div class="alert alert-'+val+' light alert-dismissable">';
     html +='   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button><i class="fa fa-info pr10"></i>';
     html +='    <strong>'+data+'</strong>'+message;
     html +=' </div>';
-    $(document).html(html);
-    $(".alert_topbar").slideToggle('fast');
+    $('#alert_topbar').html(html);
+    $("#alert_topbar").slideToggle('fast');
 }
