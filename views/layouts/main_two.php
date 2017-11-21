@@ -591,8 +591,7 @@ $this->beginPage();
             });
 
 
-            $('.fc-event').css('background','#4a89dc');
-            $('.fc-event-inner').css('color','white');
+
 
 
             $('.save_button').click(function(){
@@ -606,10 +605,17 @@ $this->beginPage();
                 $.get('<?php echo Url::to('/site/calend_data')?>',{content:content,start:start,end:end},function(data){
                     if(data.ret == 1){
                         $('#myModal').modal('hide');
+                        $('#calendar').fullCalendar('renderEvent', data.data);
+                        $('.fc-event').css('background','#4a89dc');
+                        $('.fc-event-inner').css('color','white');
                         success_topbar('success','',data.msg);
                     }
                 },'json')
             });
+
+
+            $('.fc-event').css('background','#4a89dc');
+            $('.fc-event-inner').css('color','white');
 
         });
 
@@ -617,6 +623,7 @@ $this->beginPage();
         function day_click(selDate,type){
             $('#myModal').modal('show');
             if(type == false){
+                $('#event').val('');
                 $('#startdate').val(selDate);
             }else{
                 $.get('<?php echo Url::to('/site/calend')?>',{selDate:selDate},function(e){
