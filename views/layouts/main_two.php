@@ -605,6 +605,7 @@ $this->beginPage();
                 }
                 $.get('<?php echo Url::to('/site/calend_data')?>',{content:content,start:start,end:end},function(data){
                     if(data.ret == 1){
+                        $('#myModal').modal('hide');
                         success_topbar('success','',data.msg);
                     }
                 },'json')
