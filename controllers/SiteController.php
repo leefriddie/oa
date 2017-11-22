@@ -163,7 +163,7 @@ class SiteController extends BaseController
             'user_id' => User::getUserId(),
             'mission_start' => $data['start']
         ];
-        $res = Mission::find($where);
+        $res = Mission::findOne($where);
         if(!$res){
             $model = new Mission();
         }else{
