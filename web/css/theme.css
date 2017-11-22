@@ -20897,7 +20897,7 @@ body.invoice-page .invoice-buttons {
   I. Timeline.html
 ================================================= */
 body.timeline-page #main {
-  min-height: 1400px;
+  min-height: 1000px;
 }
 body.timeline-page #content {
   padding: 8px 35px 50px 35px;
