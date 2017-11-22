@@ -17186,7 +17186,7 @@ body {
 }
 #main {
   position: relative;
-  min-height: 100%;
+  min-height: 80%;
   background: #eeeeee;
 }
 /* psuedo background */
