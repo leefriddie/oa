@@ -577,6 +577,12 @@ $this->beginPage();
                 eventClick:function(event){
                     day_click($.fullCalendar.formatDate(event.start,'yyyy-MM-dd'),true)
                 },
+                loading:function(isLoading,view){
+                    if(isLoading == false){
+                        $('.fc-event').css('background','#4a89dc');
+                        $('.fc-event-inner').css('color','white');
+                    }
+                },
                 events: [
                     <?php foreach($this->params['data'] as $mission):?>
                     {
@@ -614,8 +620,7 @@ $this->beginPage();
             });
 
 
-            $('.fc-event').css('background','#4a89dc');
-            $('.fc-event-inner').css('color','white');
+
 
         });
 
