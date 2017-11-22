@@ -170,7 +170,7 @@ $this->beginPage();
 
     <!-- Start: Main -->
     <div id="main">
-        <div style="z-index: 10;position: absolute;right:50px;top: 70px;width: auto;height: auto;" id="alert_topbar"></div>
+        <div style="z-index: 10;position: fixed;right:50px;top: 70px;width: auto;height: auto;" id="alert_topbar"></div>
         <!-- Start: Header -->
         <header class="navbar navbar-fixed-top">
             <div class="navbar-branding">
