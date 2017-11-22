@@ -164,7 +164,6 @@ class SiteController extends BaseController
             'mission_start' => $data['start']
         ];
         $res = Mission::find($where);
-        print_r($res);die;
         if(!$res){
             $model = new Mission();
         }else{
