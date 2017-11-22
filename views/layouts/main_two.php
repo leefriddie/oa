@@ -27,6 +27,14 @@ $this->beginPage();
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .fc-event{
+                background:#4a89dc;
+            }
+            .fc-event-inner{
+                color:white;
+            }
+        </style>
     </head>
     <?php $this->beginBody()?>
     <body class="admin-layout-page">
@@ -576,12 +584,6 @@ $this->beginPage();
                 },
                 eventClick:function(event){
                     day_click($.fullCalendar.formatDate(event.start,'yyyy-MM-dd'),true)
-                },
-                loading:function(isLoading,view){
-                    if(isLoading == false){
-                        $('.fc-event').css('background','#4a89dc');
-                        $('.fc-event-inner').css('color','white');
-                    }
                 },
                 events: [
                     <?php foreach($this->params['data'] as $mission):?>
