@@ -614,8 +614,6 @@ $this->beginPage();
                     if(data.ret == 1){
                         $('#myModal').modal('hide');
                         $('#calendar').fullCalendar('renderEvent', data.data);
-                        $('.fc-event').css('background','#4a89dc');
-                        $('.fc-event-inner').css('color','white');
                         success_topbar('success','',data.msg);
                     }
                 },'json')
