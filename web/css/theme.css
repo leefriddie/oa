@@ -21079,7 +21079,7 @@ body.timeline-page #content {
 .maps-vector-page #content,
 .maps-full-page .map,
 .maps-vector-page .map {
-  height: 100%;
+  height: 80%;
   min-height: 0;
 }
 .maps-full-page #content,
