@@ -30,6 +30,8 @@ $this->beginPage();
         <style>
             .fc-event{
                 background:#4a89dc;
+                padding:3px;
+                margin:3px 10px;
             }
             .fc-event-inner{
                 color:white;
@@ -550,7 +552,7 @@ $this->beginPage();
 
             $('#start_time').click(function () {
                 $('#p_endtime').hide(100);
-
+                $('#enddate').val('');
             });
             $('#end_time').click(function () {
                 $('#p_endtime').show(100);
@@ -568,87 +570,76 @@ $this->beginPage();
             var d = date.getDate();
             var m = date.getMonth();
             var y = date.getFullYear();
+            var initialLangCode = 'zh';
+            //初始化FullCalendar
             $('#calendar').fullCalendar({
+                //设置头部信息，如果不想显示，可以设置header为false
                 header: {
+                    //日历头部左边：初始化切换按钮
                     left: 'prev,next today',
+                    //日历头部中间：显示当前日期信息
                     center: 'title',
+                    //日历头部右边：初始化视图
                     right: 'month,agendaWeek,agendaDay'
                 },
-                firstDay:1,
-                editable: true,
-                timeFormat: 'H:mm',
-                axisFormat: 'H:mm',
-                dayClick: function(date) {
-                    var selDate =$.fullCalendar.formatDate(date,'yyyy-MM-dd');//格式化日期
-                    day_click(selDate,false);
+                //设置是否显示周六和周日，设为false则不显示
+                weekends: true,
+                //日历初始化时显示的日期，月视图显示该月，周视图显示该周，日视图显示该天，和当前日期没有关系
+                defaultDate: '2016-06-06',
+                //日程数据
+                viewDisplay:function(view){
+                    var viewStart = $.fullCalendar.formatDate(view.start, "yyyy-MM-dd");
+                    var viewEnd = $.fullCalendar.formatDate(view.end, "yyyy-MM-dd");
+                    $('#calendar').fullCalendar('removeEvents');
+                    $.get('<?php echo Url::to(['/site/calend'])?>',{start:viewStart,end:viewEnd},function(data){
+                        $.each(data.data, function (index, term) {
+                            $("#calendar").fullCalendar('renderEvent', term, true);
+                        });
+                    },'json');
                 },
-                eventClick:function(event){
-                    day_click($.fullCalendar.formatDate(event.start,'yyyy-MM-dd'),true)
+                dayClick:function(date, allDay, jsEvent, view){
+                    var selectdate = $.fullCalendar.formatDate(date, "yyyy-MM-dd");
+                    $("#end").datetimepicker('setDate', selectdate);
+                    $('#myModal').modal('show');
+                    $('#startdate').val(selectdate);
+                    $('.save_button').click(function(){
+                        var start = $('#startdate').val();
+                        var end = $('#enddate').val();
+                        var content = $('#event').val();
+                        $.get('<?php echo Url::to(['/site/calend_data']) ?>',{start:start,end:end,content:content},function(data){
+                            if(data.ret){
+                                $.each(data.data, function (index, term) {
+                                    $('#calendar').fullCalendar('removeEvents',term.id);
+                                    $("#calendar").fullCalendar('renderEvent', term, true);
+                                });
+                                $('#myModal').modal('hide');
+                                $('#event').val('');
+                                success_topbar('success',data.msg);
+                            }
+                        },'json');
+                    })
                 },
-                events: [
-                    <?php foreach($this->params['data'] as $mission):?>
-                    {
-                        title: '<?=$mission['mission_content']?>',
-                        start: '<?=$mission['mission_start']?>',
-                        end: '<?=$mission['mission_end']?>',
-                        allday:'<?php echo $mission['mission_start']==$mission['mission_end']?true:false?>',
-                        //url:'',
-                    },
-                    <?php endforeach;?>
-                ]
             });
 
+            //初始化语言选择的下拉菜单值
+            $.each($.fullCalendar.langs, function(langCode) {
+                $('#lang-selector').append(
+                    $('<option/>')
+                        .attr('value', langCode)
+                        .prop('selected', langCode == initialLangCode)
+                        .text(langCode)
+                );
+            });
 
-
-
-
-            $('.save_button').click(function(){
-                var content = $('#event').val();
-                var start = $('#startdate').val();
-                if($('#start_time').is(':checked')){
-                    var end = start;
-                }else {
-                    var end = $('#enddate').val();
+            //当选择一种语言时触发
+            $('#lang-selector').on('change', function() {
+                if (this.value) {
+                    $('#calendar').fullCalendar('option', 'lang', this.value);
                 }
-                $.get('<?php echo Url::to('/site/calend_data')?>',{content:content,start:start,end:end},function(data){
-                    if(data.ret == 1){
-                        $('#myModal').modal('hide');
-                        $('#calendar').fullCalendar('renderEvent', data.data);
-                        success_topbar('success','',data.msg);
-                    }
-                },'json')
             });
-
-
 
 
         });
-
-
-        function day_click(selDate,type){
-            $('#myModal').modal('show');
-            if(type == false){
-                $('#event').val('');
-                $('#startdate').val(selDate);
-            }else{
-                $.get('<?php echo Url::to('/site/calend')?>',{selDate:selDate},function(e){
-                    if(e.ret == 1){
-                        var content = e.data.mission_content;
-                        var start_date = e.data.mission_start;
-                        var end_date = e.data.mission_end;
-                        $('#event').val(content);
-                        $('#startdate').val(start_date);
-
-                        if(start_date != end_date){
-                            $('#p_endtime').show();
-                            $('#start_time').attr('checked',false);
-                            $('#end_time').attr('checked',true);
-                        }
-                    }
-                },'json');
-            }
-
-        }
     </script>
     <!-- END: PAGE SCRIPTS -->
 

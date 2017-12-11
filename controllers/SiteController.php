@@ -147,13 +147,19 @@ class SiteController extends BaseController
         $data = Yii::$app->request->get();
         $where = [
             'user_id' => User::getUserId(),
+            //'mission_start' => $data['start']
         ];
-        if(isset($data['selDate'])){
-            $where['mission_start'] = $data['selDate'];
-        }
-        $mission_data = Mission::getMission($where);
-        if($mission_data){
-            return $this->return_ajax(self::SUCCESS,$mission_data);
+        $ret = Mission::getMission($where);
+        if($ret){
+            foreach($ret as $key => $val){
+                $result_return[$key]['id']    = $val['mission_id'];
+                $result_return[$key]['title'] = $val['mission_content'];
+                $result_return[$key]['start'] = $val['mission_start'];
+                $result_return[$key]['end']   = $val['mission_end'];
+                $result_return[$key]['allday']= $val['mission_start'] == $val['mission_end']?1:0;
+            }
+
+            return $this->return_ajax(self::SUCCESS,$result_return);
         }
     }
 
@@ -163,7 +169,8 @@ class SiteController extends BaseController
             'user_id' => User::getUserId(),
             'mission_start' => $data['start']
         ];
-        $res = Mission::findOne($where);
+        //$res = Mission::findOne($where);
+        $res = false;
         if(!$res){
             $model = new Mission();
         }else{
@@ -171,15 +178,19 @@ class SiteController extends BaseController
         }
         $model->mission_content = $data['content'];
         $model->mission_start   = $data['start'];
-        $model->mission_end     = $data['end'];
+        $model->mission_end     = $data['end']?$data['end']:$data['start'];
         $model->user_id         = User::getUserId();
         $result = $model->save();
         if($result){
             $ret = Mission::getMission($where);
-            $result_return['title'] = $ret['mission_content'];
-            $result_return['start'] = $ret['mission_start'];
-            $result_return['end']   = $ret['mission_end'];
-            $result_return['allday']= $ret['mission_start'] == $ret['mission_end']?1:0;
+            foreach($ret as $key => $value){
+                $result_return[$key]['id']    = $value['mission_id'];
+                $result_return[$key]['title'] = $value['mission_content'];
+                $result_return[$key]['start'] = $value['mission_start'];
+                $result_return[$key]['end']   = $value['mission_end'];
+                $result_return[$key]['allday']= $value['mission_start'] == $value['mission_end']?1:0;
+            }
+
             return $this->return_ajax(self::SUCCESS,$result_return,'添加或更新任务成功');
         }else{
             return $this->return_ajax(self::UPDATE_ERROR,false,'任务添加失败，稍后再试！');

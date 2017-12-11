@@ -553,9 +553,11 @@ function success_topbar(type,data,msg){
     var html = '';
     html +='<div class="alert alert-'+val+' light alert-dismissable">';
     html +='   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button><i class="fa fa-info pr10"></i>';
-    html +='    <strong>'+data+'</strong>'+msg;
+    html +='    <strong>'+data+'</strong>';
     html +=' </div>';
     $('#alert_topbar').html(html);
-    $("#alert_topbar").slideToggle(3000);
-    //setTimeout(location.reload(),3000);
+    $("#alert_topbar").slideToggle(3000,function(){
+      $(this).show();
+      $(this).children('div').remove();
+    });
 }
