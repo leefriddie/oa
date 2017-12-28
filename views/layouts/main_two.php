@@ -1,7 +1,7 @@
 <?php
 use app\assets\IndexAsset;
 use yii\helpers\Url;
-
+use app\models\User;
 
 IndexAsset::register($this);
 $this->beginPage();
@@ -201,7 +201,7 @@ $this->beginPage();
                     </a>
                 </li>
                 <li class="hidden-xs">
-                    <a class="request-fullscreen toggle-active" href="admin_forms-layouts.html#">
+                    <a class="request-fullscreen toggle-active" href="#">
                         <span class="ad ad-screen-full fs18"></span>
                     </a>
                 </li>
@@ -262,7 +262,7 @@ $this->beginPage();
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="admin_forms-layouts.html#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="images/1.jpg" alt="头像" class="mw30 br64 mr15">
+                    <a href="admin_forms-layouts.html#" class="dropdown-toggle fw600 p15" data-toggle="dropdown"> <img src="/images/1.jpg" alt="头像" class="mw30 br64 mr15">
                         <?= Yii::$app->user->identity->active_name?Yii::$app->user->identity->active_name:Yii::$app->user->identity->username?>
                         <span class="caret caret-tp hidden-xs"></span>
                     </a>
@@ -380,7 +380,14 @@ $this->beginPage();
                         </a>
                     </li>
                     <?php endforeach;?>
-
+                    <?php if(User::getUserRole() == '10'):?>
+                    <li>
+                        <a href="<?=Url::to(['/site/setting'])?>">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <span class="sidebar-title">权限管理</span>
+                        </a>
+                    </li>
+                    <?php endif;?>
                 </ul>
                 <!-- End: Sidebar Menu -->
 
@@ -397,7 +404,7 @@ $this->beginPage();
 
         </aside>
 
-
+        <?php $this->endBody()?>
         <section id="content_wrapper">
 
 
@@ -537,7 +544,6 @@ $this->beginPage();
 
     <!-- BEGIN: PAGE SCRIPTS -->
 
-    <?php $this->endBody()?>
     <script type="text/javascript">
         jQuery(document).ready(function() {
 
@@ -635,6 +641,36 @@ $this->beginPage();
             $('#lang-selector').on('change', function() {
                 if (this.value) {
                     $('#calendar').fullCalendar('option', 'lang', this.value);
+                }
+            });
+
+            $('#datatable').dataTable({
+                "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': [-1]
+                }],
+                "oLanguage": {
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sZeroRecords": "抱歉， 没有找到",
+                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                    "sInfoEmpty": "没有数据",
+                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "前一页",
+                        "sNext": "后一页",
+                        "sLast": "尾页"
+                    },
+
+                },
+                "iDisplayLength": 5,
+                "aLengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ],
+                "sDom": '<"dt-panelmenu clearfix"lfr>t<"dt-panelfooter clearfix"ip>',
+                "oTableTools": {
+                    "sSwfPath": "vendor/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
                 }
             });
 

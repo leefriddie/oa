@@ -20087,6 +20087,7 @@ body.sb-l-m.mobile-view .nano > .nano-pane {
 }
 .sb-r-c #content_wrapper {
   margin-right: 0;
+  margin-bottom: 100px;
 }
 /*====================================================
   C. Left Sidebar Minified Helper

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
 /**
@@ -26,7 +27,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
 
-    const STATUS_ACTIVE = 10;
+    const STATUS_ACTIVE = 1;
     const STATUS_DONY = 0;
 
 
@@ -96,13 +97,54 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
 
+    /**
+     * 获取用户id
+     * @return mixed
+     */
     static public function getUserId(){
         return Yii::$app->user->identity->id;
     }
 
+    /**
+     * 获取用户名
+     * @return mixed
+     */
     static public function getUserName(){
         return Yii::$app->user->identity->username;
     }
+
+    /**
+     * 获取用户权限等级
+     * 10为admin
+     * @return mixed
+     */
+    static public function getUserRole(){
+        return Yii::$app->user->identity->role;
+    }
+
+    /**
+     * 返回除管理员外的所有用户
+     * @return array
+     */
+    static public function getUserList(){
+        $where = ['<>','role','10'];
+        return (new Query())->select(['id','username','active_name','email','role','status','created_at','created_at','updated_at'])->from(self::tableName())->where($where)->all();
+    }
+
+
+    /**
+     * 返回单用户数据
+     * @param $uid
+     * @return array|bool
+     */
+    public function getDataById($uid){
+        return (new Query())->select()->from(self::tableName())->where(['id'=>$uid])->one();
+    }
+
+
+
+
+
 
 
 

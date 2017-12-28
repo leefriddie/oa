@@ -74,7 +74,7 @@ class PmsUsers extends \yii\db\ActiveRecord implements IdentityInterface
      * @return null|static
      */
     public static function findByUsername($username){
-        return static::findOne(['username'=>$username,'status'=>10]);
+        return static::findOne(['username'=>$username,'status'=>1]);
     }
 
 

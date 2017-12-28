@@ -30,4 +30,10 @@ class BaseController extends Controller{
 
 
 
+    public function showAlert(){
+        return $this->render('/layouts/publicAlert');
+    }
+
+
+
 }

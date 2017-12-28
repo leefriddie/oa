@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\EditData\EditDataWidget;
 use app\models\User;
 use Yii;
 use yii\base\ErrorException;
@@ -196,6 +197,18 @@ class SiteController extends BaseController
             return $this->return_ajax(self::UPDATE_ERROR,false,'任务添加失败，稍后再试！');
         }
     }
+
+
+    public function actionSetting(){
+        $userData = User::getUserList();
+        foreach($userData as $key => $item){
+            $userData[$key]['created_at'] = date('Y-m-d H:i:s',$item['created_at']);
+            $userData[$key]['updated_at'] = date('Y-m-d H:i:s',$item['updated_at']);
+            $userData[$key]['status'] = $item['status']==1?'正常':'封禁';
+        }
+        return $this->render('setting',['data'=>$userData]);
+    }
+
 
 
 

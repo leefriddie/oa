@@ -561,3 +561,5 @@ function success_topbar(type,data,msg){
       $(this).children('div').remove();
     });
 }
+
+
