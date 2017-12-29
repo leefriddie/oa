@@ -644,35 +644,7 @@ $this->beginPage();
                 }
             });
 
-            $('#datatable').dataTable({
-                "aoColumnDefs": [{
-                    'bSortable': false,
-                    'aTargets': [-1]
-                }],
-                "oLanguage": {
-                    "sLengthMenu": "每页显示 _MENU_ 条记录",
-                    "sZeroRecords": "抱歉， 没有找到",
-                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-                    "sInfoEmpty": "没有数据",
-                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-                    "oPaginate": {
-                        "sFirst": "首页",
-                        "sPrevious": "前一页",
-                        "sNext": "后一页",
-                        "sLast": "尾页"
-                    },
 
-                },
-                "iDisplayLength": 5,
-                "aLengthMenu": [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, "All"]
-                ],
-                "sDom": '<"dt-panelmenu clearfix"lfr>t<"dt-panelfooter clearfix"ip>',
-                "oTableTools": {
-                    "sSwfPath": "vendor/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-                }
-            });
 
 
         });

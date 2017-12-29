@@ -2,8 +2,8 @@
 
 namespace app\controllers;
 
-use app\components\EditData\EditDataWidget;
 use app\models\User;
+use app\models\UserForm;
 use Yii;
 use yii\base\ErrorException;
 use yii\db\Exception;
@@ -201,12 +201,20 @@ class SiteController extends BaseController
 
     public function actionSetting(){
         $userData = User::getUserList();
+        $model = new UserForm();
+        $data = Yii::$app->request->post();
+        $callback = false;
+        //var_dump($model->load($data));die;
+        if($model->load($data) && $model->saveData()){
+            $callback['ret'] = true;
+            $callback['msg'] = '更新成功';
+        }
         foreach($userData as $key => $item){
             $userData[$key]['created_at'] = date('Y-m-d H:i:s',$item['created_at']);
             $userData[$key]['updated_at'] = date('Y-m-d H:i:s',$item['updated_at']);
             $userData[$key]['status'] = $item['status']==1?'正常':'封禁';
         }
-        return $this->render('setting',['data'=>$userData]);
+        return $this->render('setting',['data'=>$userData,'callback'=>$callback]);
     }
 
 
