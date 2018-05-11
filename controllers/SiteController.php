@@ -203,10 +203,10 @@ class SiteController extends BaseController
         $userData = User::getUserList();
         $model = new UserForm();
         $data = Yii::$app->request->post();
-        $callback = false;
-        //var_dump($model->load($data));die;
-        if($model->load($data) && $model->saveData()){
-            $callback['ret'] = true;
+        $callback['ret'] = false;
+        $callback['msg'] = '';
+        if($model->load($data) && $model->saveData($data)){
+            $callback['ret'] = $data['UserForm']['id'];
             $callback['msg'] = '更新成功';
         }
         foreach($userData as $key => $item){
@@ -214,7 +214,8 @@ class SiteController extends BaseController
             $userData[$key]['updated_at'] = date('Y-m-d H:i:s',$item['updated_at']);
             $userData[$key]['status'] = $item['status']==1?'正常':'封禁';
         }
-        return $this->render('setting',['data'=>$userData,'callback'=>$callback]);
+
+        return $this->render('setting',['data'=>$userData,'callback'=>$callback,'model'=>$model]);
     }
 
 

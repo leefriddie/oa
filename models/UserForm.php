@@ -28,12 +28,15 @@ class UserForm extends Model{
     }
 
 
-    public function saveData(){
-        $model = new User();
-        $model->id = $this->id;
-        $model->username = $this->username;
-        $model->active_name = $this->activeName;
-        $model->email = $this->email;
+    public function saveData($data){
+        $data = $data[$this->formName()];
+        $model = User::findOne($data['id']);
+        //var_dump($data);die;
+        //$model->id = $data['id'];
+        $model->username = $data['username'];
+        $model->active_name = $data['activeName'];
+        $model->email = $data['email'];
+        $model->updated_at = time();
         $result = $model->save();
         if($result){
             return true;

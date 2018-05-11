@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use app\models\User;
+use app\models\UsersPermissions;
 
 /**
  * LoginForm is the model behind the login form.
@@ -108,9 +109,13 @@ class LoginForm extends Model
      * @param $data
      */
     protected function _AfterLogin($data){
-        $model = new UsersPermissions();
         $this->id = User::findByUsername($data->sender->username)->id;
-        $permission = $model->getPermissions($this->id);
-        Yii::$app->session->set('permission',$permission);
+        $permission = UsersPermissions::find()->where(['userid'=>$this->id])->with('permission')->asArray()->all();
+        foreach($permission as $val){
+            $new_permission['userid'] = $val['userid'];
+            $new_permission['pid'][] = $val['pid'];
+            $new_permission['permission'][] = $val['permission'][0];
+        }
+        Yii::$app->session->set('permission',$new_permission);
     }
 }

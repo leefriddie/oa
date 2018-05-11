@@ -6,7 +6,7 @@ use yii\helpers\Html;
 $model = new UserForm();
 ?>
 <!--    弹窗-->
-<?php $form = ActiveForm::begin(['id' => 'table-form']); ?>
+<?php $form = ActiveForm::begin(['id' => 'user-form']); ?>
     <div class="modal fade in" id="EditAlert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

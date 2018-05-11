@@ -3,25 +3,25 @@
 namespace app\models;
 
 use Yii;
-use yii\db\Query;
-use app\models\Permissions;
+use app\models\UsersPermissions;
 
 /**
- * This is the model class for table "pms_users_permissions".
+ * This is the model class for table "pms_permissions".
  *
- * @property integer $userid
+ * @property integer $id
  * @property string $permission
  * @property string $model
  * @property string $modelc
+ * @property string $class
  */
-class UsersPermissions extends \yii\db\ActiveRecord
+class Permissions extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'pms_users_permissions';
+        return 'pms_permissions';
     }
 
     /**
@@ -30,9 +30,9 @@ class UsersPermissions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['userid'], 'required'],
-            [['userid'], 'integer'],
+            [['class'], 'required'],
             [['permission', 'model', 'modelc'], 'string', 'max' => 5000],
+            [['class'], 'string', 'max' => 50],
         ];
     }
 
@@ -42,16 +42,12 @@ class UsersPermissions extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'userid' => 'Userid',
+            'id' => 'ID',
             'permission' => 'Permission',
             'model' => 'Model',
             'modelc' => 'Modelc',
+            'class' => 'Class',
         ];
-    }
-
-
-    public function getPermission(){
-        return $this->hasMany(Permissions::className(),['id'=>'pid']);
     }
 
 

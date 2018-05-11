@@ -372,7 +372,7 @@ $this->beginPage();
                             <span class="label label-xs bg-primary">New</span></span>
                         </a>
                     </li>
-                    <?php foreach(Yii::$app->session->get('permission') as $item):?>
+                    <?php foreach(Yii::$app->session->get('permission')['permission'] as $item):?>
                     <li>
                         <a href="<?=Url::to([$item['permission'].'/index'])?>">
                             <span class="glyphicon glyphicon-<?= $item['class']?>"></span>
