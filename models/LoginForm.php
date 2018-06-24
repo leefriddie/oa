@@ -111,11 +111,16 @@ class LoginForm extends Model
     protected function _AfterLogin($data){
         $this->id = User::findByUsername($data->sender->username)->id;
         $permission = UsersPermissions::find()->where(['userid'=>$this->id])->with('permission')->asArray()->all();
-        foreach($permission as $val){
-            $new_permission['userid'] = $val['userid'];
-            $new_permission['pid'][] = $val['pid'];
-            $new_permission['permission'][] = $val['permission'][0];
+        if($permission) {
+            foreach ($permission as $val) {
+                $new_permission['userid'] = $val['userid'];
+                $new_permission['pid'][] = $val['pid'];
+                $new_permission['permission'][] = $val['permission'][0];
+            }
+
+        }else{
+            $new_permission = [];
         }
-        Yii::$app->session->set('permission',$new_permission);
+        Yii::$app->session->set('permission', $new_permission);
     }
 }

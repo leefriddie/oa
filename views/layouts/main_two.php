@@ -2,6 +2,7 @@
 use app\assets\IndexAsset;
 use yii\helpers\Url;
 use app\models\User;
+use yii\helpers\Html;
 
 IndexAsset::register($this);
 $this->beginPage();
@@ -13,6 +14,7 @@ $this->beginPage();
     <head>
         <!-- Meta, title, CSS, favicons, etc. -->
         <meta charset="<?php Yii::$app->language?>">
+        <?= Html::csrfMetaTags() ?>
         <title>L-OA</title>
         <meta name="keywords" content="HTML5 Bootstrap 3 Admin Template UI Theme" />
         <meta name="description" content="AdminDesigns - A Responsive HTML5 Admin UI Framework">
@@ -372,14 +374,20 @@ $this->beginPage();
                             <span class="label label-xs bg-primary">New</span></span>
                         </a>
                     </li>
-                    <?php foreach(Yii::$app->session->get('permission')['permission'] as $item):?>
+                    <?php
+                    if(isset(Yii::$app->session->get('permission')['permission'])):
+                        foreach(Yii::$app->session->get('permission')['permission'] as $item):
+                    ?>
                     <li>
                         <a href="<?=Url::to([$item['permission'].'/index'])?>">
                             <span class="glyphicon glyphicon-<?= $item['class']?>"></span>
                             <span class="sidebar-title"><?= $item['model']?></span>
                         </a>
                     </li>
-                    <?php endforeach;?>
+                    <?php
+                        endforeach;
+                    endif;
+                    ?>
                     <?php if(User::getUserRole() == '10'):?>
                     <li>
                         <a href="<?=Url::to(['/site/setting'])?>">

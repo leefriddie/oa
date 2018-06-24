@@ -88,10 +88,6 @@ class PmsUsers extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
 
-    public static function getPermissions(){
-
-    }
-
 
 
 

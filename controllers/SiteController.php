@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\User;
 use app\models\UserForm;
+use app\models\UsersPermissions;
 use Yii;
 use yii\base\ErrorException;
 use yii\db\Exception;
@@ -13,6 +14,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Mission;
+use app\models\Permissions;
 
 class SiteController extends BaseController
 {
@@ -170,8 +172,8 @@ class SiteController extends BaseController
             'user_id' => User::getUserId(),
             'mission_start' => $data['start']
         ];
-        //$res = Mission::findOne($where);
-        $res = false;
+        $res = Mission::findOne($where);
+        //$res = false;
         if(!$res){
             $model = new Mission();
         }else{
@@ -199,23 +201,50 @@ class SiteController extends BaseController
     }
 
 
+    /**
+     * 修改用户信息
+     * @return string
+     */
     public function actionSetting(){
-        $userData = User::getUserList();
         $model = new UserForm();
         $data = Yii::$app->request->post();
         $callback['ret'] = false;
         $callback['msg'] = '';
-        if($model->load($data) && $model->saveData($data)){
+        if($model->load($data) && $res = $model->saveData($data)){
+            if(!isset($data['mission'])){
+                $data['mission'] = [];
+            }
+            $model->UpdateMission($data['UserForm']['id'],$data['mission']);
             $callback['ret'] = $data['UserForm']['id'];
             $callback['msg'] = '更新成功';
         }
+
+        $Permissions = Permissions::getPermissions();//获取所有字段
+        $userData = User::getUserList();
         foreach($userData as $key => $item){
             $userData[$key]['created_at'] = date('Y-m-d H:i:s',$item['created_at']);
             $userData[$key]['updated_at'] = date('Y-m-d H:i:s',$item['updated_at']);
             $userData[$key]['status'] = $item['status']==1?'正常':'封禁';
         }
 
-        return $this->render('setting',['data'=>$userData,'callback'=>$callback,'model'=>$model]);
+        return $this->render('setting',['data'=>$userData,'callback'=>$callback,'model'=>$model,'permissions'=>$Permissions]);
+    }
+
+
+
+    public function actionGet_data(){
+        $id = Yii::$app->request->post('id');
+        $data = UsersPermissions::getDataById($id);
+        if($data){
+            foreach($data as $user){
+                $result[$user['userid']][] = $user['pid'];
+            }
+            echo $this->return_ajax(1,$result);
+        }else{
+            echo $this->return_ajax(0);
+        }
+
+
     }
 
 

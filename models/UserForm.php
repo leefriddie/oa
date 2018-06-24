@@ -20,6 +20,8 @@ class UserForm extends Model{
     public $updatedAt;
     public $status;
 
+    const UPDATE_MISSION = 'updateMission';
+
     public function rules()
     {
         return [
@@ -28,6 +30,11 @@ class UserForm extends Model{
     }
 
 
+    /**
+     * 保存数据
+     * @param $data
+     * @return bool
+     */
     public function saveData($data){
         $data = $data[$this->formName()];
         $model = User::findOne($data['id']);
@@ -36,11 +43,23 @@ class UserForm extends Model{
         $model->username = $data['username'];
         $model->active_name = $data['activeName'];
         $model->email = $data['email'];
-        $model->updated_at = time();
+        //$model->created_at = time();
+        $model->status = $data['status'];
         $result = $model->save();
         if($result){
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * 更新用户权限 ;
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    public function UpdateMission($id,$data){
+        return UsersPermissions::saveMission($id,$data);
     }
 }

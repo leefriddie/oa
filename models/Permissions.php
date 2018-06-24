@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\UsersPermissions;
+use yii\db\Query;
 
 /**
  * This is the model class for table "pms_permissions".
@@ -48,6 +49,14 @@ class Permissions extends \yii\db\ActiveRecord
             'modelc' => 'Modelc',
             'class' => 'Class',
         ];
+    }
+
+    /**
+     * 获取所有权限字段
+     * @return array
+     */
+    static public function getPermissions(){
+        return (new Query())->from(self::tableName())->all();
     }
 
 
