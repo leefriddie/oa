@@ -138,8 +138,17 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      * @param $uid
      * @return array|bool
      */
-    public function getDataById($uid){
-        return (new Query())->select()->from(self::tableName())->where(['id'=>$uid])->one();
+    static public function getDataById($uid = 0){
+        if($uid){
+            $where['id'] = $uid;
+        }else{
+            $where = array();
+        }
+        $res = (new Query())->from(self::tableName())->where($where);
+        if($uid)
+            return $res->one();
+        else
+            return $res->all();
     }
 
 

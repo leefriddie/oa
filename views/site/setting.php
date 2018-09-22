@@ -13,7 +13,9 @@ TableAsset::register($this);
     <div class="panel panel-visible" id="spy2">
         <div class="panel-heading">
             <div class="panel-title hidden-xs">
-                <span class="glyphicon glyphicon-tasks"></span>人员列表</div>
+                <span class="glyphicon glyphicon-tasks"></span>人员列表
+                <button type="button" class="btn btn-lg btn-info" onclick="editAlert(-1)" style="height: 30px;float: right;font-size: 10px;padding: 5px;margin: 5px;margin-right: 30px;">添加人员</button>
+            </div>
         </div>
         <div class="panel-body pn">
             <table class="table table-striped table-hover" id="datatable" cellspacing="0" width="100%">
@@ -42,11 +44,8 @@ TableAsset::register($this);
                     <td><?=$item['status']?></td>
                     <td>
                         <?=Html::submitButton('',['class'=>'glyphicon glyphicon-edit edit','value'=>$item['id'],'name'=>'edit','onclick'=>"editAlert({$item['id']})"])?>
-                        <?php if($item['status'] == '封禁'):?>
-                            <?=Html::submitButton('',['class'=>'glyphicon glyphicon-ok','title'=>'解封','value'=>1,'name'=>'offban'])?>
-                        <?php else:?>
-                            <?=Html::submitButton('',['class'=>'glyphicon glyphicon-remove','title'=>'封禁','value'=>2,'name'=>'onban'])?>
-                        <?php endif;?>
+
+                        <?=Html::submitButton('',['class'=>'glyphicon glyphicon-remove','title'=>'删除','value'=>2,'name'=>'onban','onclick'=>"delUser({$item['id']})"])?>
                     </td>
                 </tr>
                 <?php endforeach;?>
@@ -83,13 +82,13 @@ TableAsset::register($this);
                 <?=$form->field($model,'createdAt')->textInput(['class'=>'input'])->label(false)?>
 
                 <p>更新时间：</p>
-                <?=$form->field($model,'updatedAt')->textInput(['class'=>'input'])->label(false)?>
+                <?=$form->field($model,'updatedAt')->textInput(['class'=>'input','readonly'=>'readonly'])->label(false)?>
 
                 <p>状态：</p>
                 <?=$form->field($model,'status')->dropDownList([1=>'正常',0=>'封禁'],['class'=>'select_status'])->label(false)?>
                 <?php foreach($permissions as $item):?>
                     <label class="checkbox-inline mr10">
-                        <input type="checkbox" id="model<?php echo $item['id']?>" value="<?php echo $item['id']?>" name="mission[]"><?php echo $item['model']?>
+                        <input type="checkbox" value="<?php echo $item['id']?>" name="mission[]"><?php echo $item['model']?>
                     </label>
                 <?php endforeach;?>
             </div>
@@ -141,33 +140,50 @@ TableAsset::register($this);
     });
 function editAlert(id){
     $('#EditAlert').modal('show');
-    var res = <?php echo json_encode($data);?>;
-    for (i in res){
-        $('#userform-id').val(res[i].id);
-        $('#userform-username').val(res[i].username);
-        $('#userform-activename').val(res[i].active_name);
-        $('#userform-email').val(res[i].email);
-        $('#userform-createdat').val(res[i].created_at);
-        $('#userform-updatedat').val(res[i].updated_at);
-        if(res[i].status == '正常'){
-            var status = 1;
-        }else{
-            var status = 0;
-        }
-        $('.select_status option').each(function(){
-            if($(this).val() == status){
-                $(this).attr('selected',true);
-            }
-        });
-        $.post('<?php echo Url::to(['/site/get_data'])?>',{id:id,},function(a){
+    if(id > 0) {
+        $.post('<?php echo Url::to(['/site/get_data'])?>', {id: id}, function (a) {
+            if (a.ret) {
+                var data = a.data.userData;
+                $('#userform-id').val(data.id);
+                $('#userform-username').val(data.username);
+                $('#userform-activename').val(data.active_name);
+                $('#userform-email').val(data.email)
+                $('#userform-createdat').val(data.created_at);
+                $('#userform-updatedat').val(data.updated_at);
+                $('#userform-status').children('option').each(function () {
+                    var temp = $(this).val();
+                    if (temp == data.status) {
+                        $(this).attr('selected', true);
+                    }
+                });
+                if (data.mid) {
+                    $.each($("[name='mission[]']"), function () {
+                        if (isInArray(data.mid, $(this).val())) {
+                            $(this).prop('checked',true);
+                        }else{
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
 
-            for(var j=0;j<=a.data[res[i].id].length;j++){
-                $('#model'+a.data[res[i].id][j]).attr('checked',true);
             }
-
+        }, 'json');
+    }else{
+        $('#userform-username').val('');
+        $('#userform-activename').val('');
+        $('#userform-email').val('');
+        var date = new Date().Format('yyyy-MM-dd hh:mm:ss');
+        $('#userform-createdat').val(date);
+        $('#userform-updatedat').val('');
+        $.post('<?php echo Url::to(['/site/get_data'])?>',{},function(a){
+            if(a.ret){
+                var data = a.data;
+                $('#userform-id').val(data.id);
+                $.each($("[name='mission[]']"), function () {
+                    $(this).prop('checked',true);
+                });
+            }
         },'json');
-
-        //$('#userform-status').val(data.status);
     }
 }
 
@@ -178,6 +194,43 @@ function closeEdit(type){
 }
 
 
+    function isInArray(arr,value){
+        for(var i = 0; i < arr.length; i++){
+            if(value === arr[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    function delUser(id){
+        $.post('<?php echo Url::to(['/site/del_user'])?>',{id:id},function(a){
+            if(a.ret){
+                setTimeout(location.href='<?php echo Url::to(['/site/setting'])?>',3000);
+            }else{
+                success_topbar('warning',a.data.msg);
+            }
+
+        },'json');
+    }
+
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
 
 </script>
 

@@ -223,7 +223,7 @@ class SiteController extends BaseController
         $userData = User::getUserList();
         foreach($userData as $key => $item){
             $userData[$key]['created_at'] = date('Y-m-d H:i:s',$item['created_at']);
-            $userData[$key]['updated_at'] = date('Y-m-d H:i:s',$item['updated_at']);
+            $userData[$key]['updated_at'] = $item['updated_at']?date('Y-m-d H:i:s',$item['updated_at']):'';
             $userData[$key]['status'] = $item['status']==1?'正常':'封禁';
         }
 
@@ -231,20 +231,51 @@ class SiteController extends BaseController
     }
 
 
-
+    /**
+     * 获取单个用户信息以及所拥有的权限
+     */
     public function actionGet_data(){
         $id = Yii::$app->request->post('id');
-        $data = UsersPermissions::getDataById($id);
-        if($data){
-            foreach($data as $user){
-                $result[$user['userid']][] = $user['pid'];
+        if($id) {
+            $userData = User::getDataById($id);
+            $data = UsersPermissions::getDataById($id);
+            if ($userData) {
+                $userData['created_at'] = date('Y-m-d H:m', $userData['created_at']);
+                $userData['updated_at'] = date('Y-m-d H:m', $userData['updated_at']);
+                foreach ($data as $ids) {
+                    $userData['mid'][] = $ids['pid'];
+                }
+                $result['userData'] = $userData;
+                echo $this->return_ajax(1, $result);
+            } else {
+                echo $this->return_ajax(0);
             }
-            echo $this->return_ajax(1,$result);
         }else{
-            echo $this->return_ajax(0);
+            $userData = User::getDataById();
+            $userData = end($userData);
+            if($userData){
+                echo $this->return_ajax(1,array('id'=>$userData['id']+1));
+            }else{
+                echo $this->return_ajax(0);
+            }
         }
+    }
 
 
+    /**
+     * 删除用户
+     */
+    public function actionDel_user(){
+        $id = Yii::$app->request->post('id');
+        $userData = User::findOne($id);
+        if($userData){
+            $result = $userData->delete();
+            if($result){
+                echo $this->return_ajax(1,0, '删除成功');
+            }else{
+                echo $this->return_ajax(0,0,'删除失败，稍后再试');
+            }
+        }
     }
 
 

@@ -9,7 +9,7 @@
  Target Server Version : 50505
  File Encoding         : utf-8
 
- Date: 06/24/2018 23:05:57 PM
+ Date: 09/22/2018 22:58:03 PM
 */
 
 SET NAMES utf8;
@@ -900,20 +900,20 @@ CREATE TABLE `pms_users` (
   `password_reset_token` varchar(255) DEFAULT NULL COMMENT '重置密码token',
   `email_validate_token` varchar(255) DEFAULT NULL COMMENT '邮箱验证token',
   `email` varchar(255) NOT NULL COMMENT '邮箱',
-  `role` smallint(6) NOT NULL DEFAULT '10' COMMENT '角色等级',
+  `role` smallint(6) NOT NULL DEFAULT '1' COMMENT '角色等级',
   `status` smallint(6) NOT NULL DEFAULT '10' COMMENT '状态',
   `avatar` varchar(255) DEFAULT NULL COMMENT '头像',
   `vip_lv` int(11) DEFAULT '0' COMMENT 'vip等级',
   `created_at` int(11) NOT NULL COMMENT '创建时间',
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=562 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=561 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
 -- ----------------------------
 --  Records of `pms_users`
 -- ----------------------------
 BEGIN;
-INSERT INTO `pms_users` VALUES ('560', '李健', 'admin', '0O-ENV-WVRvDGjdHb5vfNOL4SpYDFvZg', '$2y$13$KCZWDH91YCl2zEk4Z.jQPuE.kJt2VF4NyZ6VFRb3cIzNTbyMKaOOC', null, null, '15921609780@163.com', '10', '1', null, '0', '1490677438', '1490677438'), ('561', '测试用户', 'test1', 'MVDZonluiEIzJF_cGjg0_XyqnAGIESZl', '$2y$13$B4cHMvsZpFzFtbUeEQ4F7eAjUSIluSgyvdfl.rna.kGgKNA76sSSu', null, null, '159216097@163.com', '1', '1', null, '0', '1490682785', '1529680387');
+INSERT INTO `pms_users` VALUES ('560', '李健', 'admin', '0O-ENV-WVRvDGjdHb5vfNOL4SpYDFvZg', '$2y$13$KCZWDH91YCl2zEk4Z.jQPuE.kJt2VF4NyZ6VFRb3cIzNTbyMKaOOC', null, null, '15921609780@163.com', '10', '1', null, '0', '1490677438', '1490677438');
 COMMIT;
 
 -- ----------------------------
@@ -929,7 +929,7 @@ CREATE TABLE `pms_users_permissions` (
 --  Records of `pms_users_permissions`
 -- ----------------------------
 BEGIN;
-INSERT INTO `pms_users_permissions` VALUES ('560', '1'), ('560', '2'), ('560', '3'), ('560', '5'), ('560', '6'), ('560', '7'), ('561', '1'), ('561', '2'), ('561', '3');
+INSERT INTO `pms_users_permissions` VALUES ('560', '1'), ('560', '2'), ('560', '3'), ('560', '5'), ('560', '6'), ('560', '7'), ('563', '1'), ('563', '2'), ('563', '3'), ('563', '5'), ('563', '6'), ('563', '7'), ('564', '1'), ('564', '2'), ('564', '3'), ('564', '5'), ('564', '6'), ('564', '7'), ('562', '1'), ('562', '2'), ('562', '3'), ('562', '5'), ('562', '6'), ('562', '7'), ('561', '1'), ('561', '2'), ('561', '3'), ('561', '5'), ('561', '6'), ('561', '7');
 COMMIT;
 
 -- ----------------------------
