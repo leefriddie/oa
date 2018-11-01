@@ -271,6 +271,7 @@ class SiteController extends BaseController
         if($userData){
             $result = $userData->delete();
             if($result){
+                UsersPermissions::delMission($id);
                 echo $this->return_ajax(1,0, '删除成功');
             }else{
                 echo $this->return_ajax(0,0,'删除失败，稍后再试');

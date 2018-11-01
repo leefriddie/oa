@@ -41,7 +41,7 @@ class UserForm extends Model{
         $data = $data[$this->formName()];
         $model = User::findOne($data['id']);
         if(!$model){
-            $password = Yii::$app->getSecurity()->generatePasswordHash('123456');
+            $password = Yii::$app->getSecurity()->generatePasswordHash($data['username']);
             $save = [
                 'id' => $data['id'],
                 'password_hash' => $password,
@@ -58,6 +58,7 @@ class UserForm extends Model{
         $model->active_name = $data['activeName'];
         $model->email = $data['email'];
         $model->status = $data['status'];
+        $model->updated_at = time();
         $result = $model->save();
         if($result){
             return true;

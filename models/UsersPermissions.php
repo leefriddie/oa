@@ -84,6 +84,20 @@ class UsersPermissions extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * 删除用户对于权限
+     * @param $id
+     * @return bool|int
+     */
+    static public function delMission($id){
+        $user = self::find($id);
+        if($user){
+            return self::deleteAll(['userid'=>$id]);
+        }else{
+            return false;
+        }
+    }
+
 
 
 }
