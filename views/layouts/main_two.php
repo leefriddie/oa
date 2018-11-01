@@ -549,7 +549,8 @@ $this->beginPage();
             transition: all 0.7s ease;
         }
     </style>
-
+    </body>
+    <?php //$this->endBody()?>
     <!-- BEGIN: PAGE SCRIPTS -->
 
     <script type="text/javascript">
@@ -676,8 +677,6 @@ $this->beginPage();
         }
     </script>
     <!-- END: PAGE SCRIPTS -->
-
-    </body>
 
     </html>
 <?php $this->endPage()?>

@@ -50,6 +50,7 @@ class UserForm extends Model{
                 'active_name' => $data['activeName'],
                 'email' => $data['email'],
                 'status' => $data['status'],
+                'updated_at' => time(),
             ];
             $result = Yii::$app->db->createCommand()->insert(User::tableName(),$save)->execute();
             return $result;

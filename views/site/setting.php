@@ -79,7 +79,7 @@ TableAsset::register($this);
                 <?=$form->field($model,'email')->textInput(['class'=>'input'])->label(false)?>
 
                 <p>创建时间：</p>
-                <?=$form->field($model,'createdAt')->textInput(['class'=>'input'])->label(false)?>
+                <?=$form->field($model,'createdAt')->textInput(['class'=>'input datetimepicker1'])->label(false)?>
 
                 <p>更新时间：</p>
                 <?=$form->field($model,'updatedAt')->textInput(['class'=>'input','readonly'=>'readonly'])->label(false)?>
@@ -101,13 +101,6 @@ TableAsset::register($this);
 </div>
 <?php ActiveForm::end()?>
 <script>
-    var callback = '<?=$callback['ret']?$callback['ret']:0?>';
-    var callback_msg = '<?=$callback['msg']?$callback['msg']:0?>';
-    if(callback != 0){
-        success_topbar('success',callback_msg);
-    }
-
-
 
     $('#datatable').dataTable({
         "aoColumnDefs": [{
@@ -209,7 +202,7 @@ function closeEdit(type){
             if(a.ret){
                 setTimeout(location.href='<?php echo Url::to(['/site/setting'])?>',3000);
             }else{
-                success_topbar('warning',a.data.msg);
+                //success_topbar('warning',a.data.msg);
             }
 
         },'json');
@@ -231,6 +224,8 @@ function closeEdit(type){
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+
+    $('.datetimepicker1').datetimepicker();
 
 </script>
 
