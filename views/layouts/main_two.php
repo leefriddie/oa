@@ -270,7 +270,7 @@ $this->beginPage();
                     </a>
                     <ul class="dropdown-menu list-group dropdown-persist w250" role="menu">
                         <li class="list-group-item">
-                            <a href="<?=Url::to(['site/user'])?>" class="animated animated-short fadeInUp">
+                            <a href="<?=Url::to(['index/user'])?>" class="animated animated-short fadeInUp">
                                 <span class="fa fa-gear"></span> 个人信息 </a>
                         </li>
                         <li class="list-group-item">
